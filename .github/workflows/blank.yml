@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+pygame
+pydub
+scikit-learn
+numpy
+gtts
