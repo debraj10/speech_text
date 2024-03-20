@@ -32,12 +32,22 @@ def transcribe_audio(file_path, language='en-IN'):
 @app.post("/speech_text")
 async def speech_text(file: UploadFile = File(...), language: str = 'bn-IN'):
     print("Content Type:", file.content_type)  # Print content type
-    if file.content_type and file.content_type.split('/')[0] != 'audio':
+    if file.content_type.split('/')[0] != 'audio':
         raise HTTPException(status_code=400, detail="Uploaded file must be an audio file")
 
     try:
-        text = transcribe_audio(file.file, language=language)
+        # Save the uploaded file temporarily
+        with open("temp_audio.wav", "wb") as buffer:
+            buffer.write(file.file.read())
+
+        # Transcribe the audio from the saved file
+        text = transcribe_audio("temp_audio.wav", language=language)
+
+        # Delete the temporary file
+        os.remove("temp_audio.wav")
+
         return {"transcribed_text": text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
