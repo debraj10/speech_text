@@ -6,4 +6,4 @@ pydub
 scikit-learn
 numpy
 gtts
-speech_recognition
+speechrecognition
